@@ -1,21 +1,37 @@
 require './lib/bike.rb'
 class DockingStation
 
-  attr_reader :bikes
+  attr_reader :bikes , :CAPACITY
+
   def initialize
     @bikes = []
-    @capacity = 20
+    @CAPACITY = 20
   end
 
   def release_bike
-    raise "There are no bikes available." unless @bikes.length > 0
-    @bikes.pop
+    if empty?
+      raise "There are no bikes available."
+    else
+      @bikes.pop
+    end
   end
 
   def dock(bike)
-    raise "Docking station full." unless @bikes.length < @capacity
-    @bikes << bike
-    return @bikes.last
+    if full?
+      raise "Docking station full."
+    else
+      @bikes << bike
+      return @bikes.last
+    end
   end
 
+  private
+  def full?
+    @bikes.length >= @CAPACITY ? (return true) : (return false)
+  end
+
+  def empty?
+    @bikes.length <= 0 ? (return true) : (return false)
+  end
+  
 end
