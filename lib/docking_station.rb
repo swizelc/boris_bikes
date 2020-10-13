@@ -3,9 +3,9 @@ class DockingStation
 
   attr_reader :bikes , :CAPACITY
 
-  def initialize
+  def initialize(capacity = 20)
     @bikes = []
-    @CAPACITY = 20
+    @CAPACITY = capacity
   end
 
   def release_bike
@@ -33,5 +33,4 @@ class DockingStation
   def empty?
     @bikes.length <= 0 ? (return true) : (return false)
   end
-  
 end
