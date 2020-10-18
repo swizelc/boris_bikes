@@ -6,6 +6,7 @@ class DockingStation
   def initialize(capacity = 20)
     @bikes = []
     @CAPACITY = capacity
+    @brokenbikes = []
   end
 
   def release_bike
@@ -33,6 +34,17 @@ class DockingStation
       end
       return @bikes.last
     end
+  end
+
+  def brokenbikes
+    brokenbikes = []
+    @bikes.each do |bike|
+      if bike.working? == false
+        brokenbikes << bike
+        @bikes.delete_at(@bikes.index(bike))
+      end
+    end
+    return brokenbikes
   end
 
   private
