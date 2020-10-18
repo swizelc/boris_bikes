@@ -8,4 +8,5 @@ class Bike
   def working?
     @condition == "working" ? (return true) : (return false)
   end
+
 end

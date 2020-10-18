@@ -1,26 +1,29 @@
 require 'docking_station.rb'
 
 describe DockingStation do
+  let(:bike) {double(:working? => "broken", :condition= => "broken")}
   it { is_expected.to respond_to :release_bike }
 
   describe '#release_bike' do
     it 'release working bikes' do
       #make bike
-      bike = Bike.new
       #dock bikee
+      allow(bike).to receive(:condition).and_return("working")
+      allow(bike).to receive(:working?).and_return(true)
       subject.dock(bike)
       #release docked bike
-      expect(subject.release_bike).to eq bike
+      expect(subject.release_bike).to be_working
     end
   end
 
-  it 'release working bikes' do
+  it 'release only working bikes' do
     #make bike
-    bike = Bike.new
     #dock bikee
+    allow(bike).to receive(:condition).and_return("broken")
+    allow(bike).to receive(:working?).and_return(false)
     subject.dock(bike, "broken")
     #release docked bike
-    expect{subject.release_bike}.to raise_error "There are no working bikes available."
+    expect {subject.release_bike}.to raise_error "There are no working bikes available."
   end
 
 
@@ -33,12 +36,11 @@ describe DockingStation do
   end
 
   it 'docks working bikes' do
-    bike = Bike.new
     expect(subject.dock(bike)).to eq bike
   end
 
   it 'docks not working bikes' do
-    bike = Bike.new()
+    allow(bike).to receive(:condition).and_return("broken")
     subject.dock(bike, "broken")
     expect(bike.condition).to eq "broken"
   end
@@ -49,15 +51,15 @@ describe DockingStation do
 
   it 'raises error dock is full' do
     (DockingStation.new.CAPACITY).times {
-    subject.dock(Bike.new) }
-    expect { subject.dock(Bike.new) }.to raise_error "Docking station full."
+    subject.dock(bike) }
+    expect { subject.dock(bike) }.to raise_error "Docking station full."
   end
 
   it 'raises error dock is full with different capacity' do
     subject = DockingStation.new(25)
     (subject.CAPACITY).times {
-    subject.dock(Bike.new) }
-    expect { subject.dock(Bike.new) }.to raise_error "Docking station full."
+    subject.dock(bike)}
+    expect { subject.dock(bike) }.to raise_error "Docking station full."
   end
 
 end

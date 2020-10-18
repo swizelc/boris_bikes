@@ -11,7 +11,7 @@ class DockingStation
   def release_bike
     if !empty?
       @bikes.each do |bike|
-        if bike.working?
+        if bike.working? == true
           @bikes.delete_at(@bikes.index(bike))
           return bike
         else
